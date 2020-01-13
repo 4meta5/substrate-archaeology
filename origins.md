@@ -1,6 +1,21 @@
 # Origins
 
-Adding an origin involves implementing [`EnsureOrigin`](https://crates.parity.io/sp_runtime/traits/trait.EnsureOrigin.html) for a blanket struct with the calling parameters. In [`frame_collective`](https://crates.parity.io/pallet_collective/enum.RawOrigin.html):
+The [`collective`](https://crates.parity.io/pallet_collective/) module demonstrates how a native origin type. This can be used to authenticate different types of decisions with different signalling requirements. The module's `Trait`:
+
+```rust
+pub trait Trait<I=DefaultInstance>: frame_system::Trait {
+	/// The outer origin type.
+	type Origin: From<RawOrigin<Self::AccountId, I>>;
+
+	/// The outer call dispatch type.
+	type Proposal: Parameter + Dispatchable<Origin=<Self as Trait<I>>::Origin>;
+
+	/// The outer event type.
+	type Event: From<Event<Self, I>> + Into<<Self as frame_system::Trait>::Event>;
+}
+```
+
+The [`frame_collective::RawOrigin`](https://crates.parity.io/pallet_collective/enum.RawOrigin.html) type:
 
 ```rust
 pub enum RawOrigin<AccountId, I> {
@@ -10,9 +25,13 @@ pub enum RawOrigin<AccountId, I> {
 }
 ```
 
-The docs https://crates.parity.io/pallet_collective/enum.RawOrigin.html tell you more about each variant, but the interesting part is the other scaffolding required to implement the logic behind the variants.
+We can use this structure to define the logic behind consensus thresholds.
 
-For the second variant of the enum (`RawOrigin::Member`), a struct `EnsureMember`](https://crates.parity.io/pallet_collective/struct.EnsureMember.html) is declared:
+## Consensus Thresholds
+
+In order to implement consensus thresholds that correspond to the `RawOrigin` variants, it is necessary to instantiate a unit struct that implements [`EnsureOrigin`](https://crates.parity.io/sp_runtime/traits/trait.EnsureOrigin.html).
+
+Corresponding the second variant of the enum (`RawOrigin::Member`), a unit struct [`EnsureMember`](https://crates.parity.io/pallet_collective/struct.EnsureMember.html) is declared in [`collective`](https://crates.parity.io/pallet_collective/):
 
 ```rust
 pub struct EnsureMember<AccountId, I=DefaultInstance>(sp_std::marker::PhantomData<(AccountId, I)>);
@@ -36,8 +55,7 @@ impl<
 }
 ```
 
-It still isn't completely obvious to me how this verifies membership. It is likely that the inovocation is limited to an existing member by runtime method checks.
+It still isn't completely obvious to me how this verifies membership. It is likely that the invocation is limited to an existing member by checks inside of the runtime methods.
 
-## membership module
-
-* https://crates.parity.io/frame_support/macro.impl_outer_origin.html is called in `construct_runtime` and I'd like to understand more about how it is called
+### dynamic origin instantiation (idea)
+> calling  https://crates.parity.io/frame_support/macro.impl_outer_origin.html within runtime method to instantiate a new `Origin` for recipients and propose the related runtime upgrade to update some module that tracks all the recipient `Origin`s

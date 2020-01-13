@@ -42,6 +42,10 @@ ensure!(!<Vouching<T, I>>::exists(&voucher), Error::<T, I>::AlreadyVouching);
 I might be shooting myself in the foot because the `society` PR isn't merged yet, but I don't think that would compromise this clever way to save a lookup when requiring a vector two or more times in the same runtime method.
 
 ## future membership proof primitives
+* uxto filter
+* bloom filter
+* cuckoo filter
+
 * accumulators
 * group signatures
 * linkable ring signatures
