@@ -1,7 +1,9 @@
 # substrate newsletter
-subscribe to the [telegram](https://t.me/learnsubstrate) channel for more frequent updates
+
+My personal notes while building stuff for [web3garden](https://github.com/web3garden).
+
+## archive
 
 * [origins](./origins.md)
-
-## archaeology
-* [first glance issue/pr taxonomy](./archaeology.md)
+* [membership proofs](./membership_proofs.md)
+* [git archaelogy 1/1/20 (~issue/pr taxonomy)](./archaeology.md)
