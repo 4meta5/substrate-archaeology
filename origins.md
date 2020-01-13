@@ -55,7 +55,16 @@ impl<
 }
 ```
 
-It still isn't completely obvious to me how this verifies membership. It is likely that the invocation is limited to an existing member by checks inside of the runtime methods.
+## open questions:
+* how can `origin` be used to verify membership?
+* it seems like vote counting is not usually done in these implementations, but rather these instances provide verification that there is already enough support for a given proposal
+* how is this possible if it doesn't have context with respect to which proposal is being voted on `=>` how does it know how many members support the proposal for `Members(n, m)` unless these values are only passed in within the runtime method itself which is how it's done...
+* in that case, what is the point of this? just an explicit check? It seems easier to encode the checks in the runtime methods but it's also less explicit than using this handler instead, but I think it would be easier to verify errors
+* what errors are ever returned from these `EnsureOrigin` implementations
+* it seems to be generally easier to not use these hooks and encode all permissions in local runtime methods like `collective`, but this doesn't really promote ease of reuse for these vote counting algorithms
 
-### dynamic origin instantiation (idea)
+**theory**
+* the way to do it is to have the checks in the runtime but abstract vote counting algorithms out to methods that are associated with trait implementations `=>` this allows us to organize default implementations by shape 
+
+### dynamic origin instantiation
 > calling  https://crates.parity.io/frame_support/macro.impl_outer_origin.html within runtime method to instantiate a new `Origin` for recipients and propose the related runtime upgrade to update some module that tracks all the recipient `Origin`s
