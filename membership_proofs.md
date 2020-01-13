@@ -36,7 +36,6 @@ let members = <Members<T, I>>::get();
 ensure!(!Self::is_member(&members, &who), Error::<T, I>::AlreadyMember);
 // Check sender can vouch.
 ensure!(Self::is_member(&members, &voucher), Error::<T, I>::NotMember);
-ensure!(!<Vouching<T, I>>::exists(&voucher), Error::<T, I>::AlreadyVouching);
 ```
 
 I might be shooting myself in the foot because the `society` PR isn't merged yet, but I don't think that would compromise this clever way to save a lookup when requiring a vector two or more times in the same runtime method.
