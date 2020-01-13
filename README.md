@@ -1,6 +1,6 @@
 # substrate newsletter
 
-My personal notes while building stuff for [web3garden](https://github.com/web3garden).
+Personal notes while building stuff with substrate for [web3garden](https://github.com/web3garden)
 
 ## archive
 
