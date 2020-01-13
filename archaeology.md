@@ -1,5 +1,3 @@
-I'd like to create a database from the repository alone, but not willing to start another project rn...
-
 # Economics
 
 **open PRs**
