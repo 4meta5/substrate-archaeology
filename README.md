@@ -1,4 +1,4 @@
-# substrate newsletter
+# substrate archaeology
 
 Personal notes while building stuff with substrate for [web3garden](https://github.com/web3garden)
 
